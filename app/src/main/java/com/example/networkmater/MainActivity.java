@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        sendData(data);
+                        //sendData(data);
                     }
                 }).start();
             }
@@ -53,18 +53,19 @@ public class MainActivity extends AppCompatActivity {
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        startServer();
+                        //startServer();
                     }
                 }).start();
             }
         });
     }
 
+    /*
     public void sendData(String data) {
     }
 
     public void startServer() {
-    }
+    } */
 
     public void printClientLog(final String data) { // final을 사용한 이유 : 파라미터가 그대로 전달되어야하므로
         Log.d(TAG, data);
