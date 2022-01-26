@@ -76,13 +76,15 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public void printServerLog(final String data) { { // final을 사용한 이유 : 파라미터가 그대로 전달되어야하므로
-        Log.d(TAG, data);
-        handler.post(new Runnable() {
-            @Override
-            public void run() {
-                tv2.append(data + "\n");
-            }
-        });
+    public void printServerLog(final String data) {
+        { // final을 사용한 이유 : 파라미터가 그대로 전달되어야하므로
+            Log.d(TAG, data);
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    tv2.append(data + "\n");
+                }
+            });
+        }
     }
 }
