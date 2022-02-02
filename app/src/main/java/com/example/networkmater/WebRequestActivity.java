@@ -75,7 +75,6 @@ public class WebRequestActivity extends AppCompatActivity {
     }
 
     public void volleyRequest() {
-        String url = edt2.
     }
 
     public void request(String urlStr) {
