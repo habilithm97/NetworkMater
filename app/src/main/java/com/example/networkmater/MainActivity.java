@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -17,6 +18,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 /*
+*http 프로토콜은 소켓으로 웹서버에 연결한 후에 요청을 전송하고 응답을 받은 다음 연결을 끊음 -> 비연결성(Stateless)
 *소켓 : 소켓 통신에서는 클라이언트와 서버 사이의 연결이 지속되고 실시간으로 서로 데이터를 주고 받음
  -> 소켓 연결 등을 시도하거나 응답을 받아서 처리할 때 스레드를 사용해야됨
  */
@@ -42,13 +44,17 @@ public class MainActivity extends AppCompatActivity {
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final String data = edt.getText().toString();
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        sendData(data);
-                    }
-                }).start();
+                if(edt.getText().toString().equals("") || edt.getText().toString() == null) {
+                    Toast.makeText(getApplicationContext(), "입력된 텍스트가 없습니다. ", Toast.LENGTH_SHORT).show();
+                } else {
+                    final String data = edt.getText().toString();
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            sendData(data);
+                        }
+                    }).start();
+                }
             }
         });
 
