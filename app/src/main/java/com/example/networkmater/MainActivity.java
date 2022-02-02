@@ -2,6 +2,7 @@ package com.example.networkmater;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -21,7 +22,8 @@ import java.net.Socket;
 *http 프로토콜은 소켓으로 웹서버에 연결한 후에 요청을 전송하고 응답을 받은 다음 연결을 끊음 -> 비연결성(Stateless)
 *소켓 : 소켓 통신에서는 클라이언트와 서버 사이의 연결이 지속되고 실시간으로 서로 데이터를 주고 받음
  -> 소켓 연결 등을 시도하거나 응답을 받아서 처리할 때 스레드를 사용해야됨
- */
+
+*자바에서 HTTP 클라이언트를 만드는 가장 간단한 방법은 URL 객체 생성 후 이 객체의 openConnection()을 호출하여 HttpURLConnection 객체를 만드는 것임임 */
 
 public class MainActivity extends AppCompatActivity {
 
@@ -36,6 +38,14 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        Button btn3 = (Button)findViewById(R.id.btn3);
+        btn3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), WebRequestActivity.class);
+                startActivity(intent);
+            }
+        });
         EditText edt = (EditText) findViewById(R.id.edt);
         tv = (TextView) findViewById(R.id.tv);
         tv2 = (TextView) findViewById(R.id.tv2);

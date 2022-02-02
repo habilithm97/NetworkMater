@@ -57,4 +57,11 @@
                 android:layout_height="match_parent" />
         </ScrollView>
     </LinearLayout>
+
+    <Button
+        android:id="@+id/btn3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="웹 요청 액티비티로 이동하기" />
+
 </LinearLayout>
