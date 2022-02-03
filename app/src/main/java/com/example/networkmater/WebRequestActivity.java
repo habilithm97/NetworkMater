@@ -10,13 +10,20 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
 import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 
 /*
 *HttpURLConnection 객체를 사용하는 것은 요청과 응답에 필요한 코드의 양이 많음(스레드를 사용하면서 넣어야하는 코드 양도 많음)
@@ -33,12 +40,22 @@ public class WebRequestActivity extends AppCompatActivity {
     TextView tv;
     EditText edt2;
 
-    static RequestQueue requestQueue; // 요청 큐 -> 한번만 만들어서 계속 사용함
+    static RequestQueue requestQueue; // 요청 큐 -> 한번만 만들어서  계속 사용할 수 있기 때문에 static으로, 요청 큐는 앱 전체에서 사용함
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_web_request);
+
+        tv = (TextView)findViewById(R.id.tv);
+
+        Button btn3 = (Button)findViewById(R.id.btn3);
+        btn3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                tv.setText("");
+            }
+        });
 
         edt2 = (EditText)findViewById(R.id.edt2);
         Button btn2 = (Button)findViewById(R.id.btn2);
@@ -71,10 +88,35 @@ public class WebRequestActivity extends AppCompatActivity {
                 }
             }
         });
-        tv = (TextView)findViewById(R.id.tv);
     }
 
-    public void volleyRequest() {
+    public void volleyRequest() { // Volley 요청 메서드
+        String url = edt2.getText().toString();
+
+        // 문자열을 주고 받기 위한 요청 객체
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url, // 웹서버 요청 시 어떤 방식이냐, 어떤 url이냐 구분
+                new Response.Listener<String>() { // 응답을 문자열로 받아서 여기다가 넣음
+                    @Override
+                    public void onResponse(String response) {
+                        volleyPrintln("응답 : " + response);
+                    }
+                },
+                new Response.ErrorListener() { // 에러 발생 시 호출
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        volleyPrintln("에러 : " + error.getMessage());
+                    }
+                }
+                ) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                return params;
+            }
+        };
+        stringRequest.setShouldCache(false); // 이전 응답 결과를 사용하지 않겠다면 캐시를 사용하지 않도록 false
+        requestQueue.add(stringRequest); // 요청 큐에 넣기
+        volleyPrintln("요청 전송. ");
     }
 
     public void request(String urlStr) {
@@ -119,5 +161,9 @@ public class WebRequestActivity extends AppCompatActivity {
                 tv.append(data + "\n");
             }
         });
+    }
+
+    public void volleyPrintln(String data) {
+        tv.append(data + "\n");
     }
 }
