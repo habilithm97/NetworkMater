@@ -31,6 +31,10 @@ import java.util.Map;
 *Volley 사용법 : 요청 객체 생성 후 요청 큐에 넣으면 됨 -> 요청 큐가 알아서 웹서버에 요청하고 응답까지 받아줌
 
 *Volley의 가장 큰 장점 : 스레드를 신경 쓰지 않아도 됨 -> 메인 스레드에서 UI에 접근할 수 있도록 알아서 해줌(응답 받으면 바로 UI 업데이트)
+
+*JSON : 자바스크립트 객체 포맷을 데이터를 주고 받을 때 사용할 수 있도록 문자열로 표현한 것임
+*Gson : JSON 문자열을 자바 객체로 변환할 수 있도록 해줌
+ - Volley를 사용해서 웹서버로부터 JSON 응답을 받았다면 Gson을 이용해서 자바 객체로 변환하고 그 안에 있는 데이터에 접근하여 사용할 수 있음
  */
 
 public class WebRequestActivity extends AppCompatActivity {
@@ -48,6 +52,16 @@ public class WebRequestActivity extends AppCompatActivity {
         setContentView(R.layout.activity_web_request);
 
         tv = (TextView)findViewById(R.id.tv);
+
+        EditText edt3 = (EditText)findViewById(R.id.edt3);
+        
+        Button btn4 = (Button)findViewById(R.id.btn4);
+        btn4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
 
         Button btn3 = (Button)findViewById(R.id.btn3);
         btn3.setOnClickListener(new View.OnClickListener() {
@@ -88,6 +102,36 @@ public class WebRequestActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    public void JSONRequest() { // Volley 요청 메서드
+        //String url = edt2.getText().toString();
+        String url = "https://www.kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchDailyBoxOfficeList.json?key=키&targetDt=20200302";
+
+        // 문자열을 주고 받기 위한 요청 객체
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url, // 웹서버 요청 시 어떤 방식이냐, 어떤 url이냐 구분
+                new Response.Listener<String>() { // 응답을 문자열로 받아서 여기다가 넣음
+                    @Override
+                    public void onResponse(String response) {
+                        volleyPrintln("응답 : " + response);
+                    }
+                },
+                new Response.ErrorListener() { // 에러 발생 시 호출
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        volleyPrintln("에러 : " + error.getMessage());
+                    }
+                }
+        ) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                return params;
+            }
+        };
+        stringRequest.setShouldCache(false); // 이전 응답 결과를 사용하지 않겠다면 캐시를 사용하지 않도록 false
+        requestQueue.add(stringRequest); // 요청 큐에 넣기
+        volleyPrintln("요청 전송. ");
     }
 
     public void volleyRequest() { // Volley 요청 메서드
