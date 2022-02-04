@@ -9,5 +9,5 @@ public class MovieListResult { // 객체 클래스
     String boxofficeType;
     String showRange;
 
-    ArrayList<Movie> dailyBoxOffice = new ArrayList<Movie>();
+    ArrayList<Movie> dailyBoxOfficeList = new ArrayList<Movie>();
 }

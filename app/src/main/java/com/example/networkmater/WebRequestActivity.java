@@ -2,6 +2,7 @@ package com.example.networkmater;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
@@ -17,6 +18,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.gson.Gson;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -51,6 +53,15 @@ public class WebRequestActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_web_request);
 
+        Button btn5 = (Button)findViewById(R.id.btn5);
+        btn5.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), GsonCardView.class);
+                startActivity(intent);
+            }
+        });
+
         tv = (TextView)findViewById(R.id.tv);
 
         EditText edt3 = (EditText)findViewById(R.id.edt3);
@@ -59,7 +70,7 @@ public class WebRequestActivity extends AppCompatActivity {
         btn4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                GsonRequest();
             }
         });
 
@@ -104,9 +115,9 @@ public class WebRequestActivity extends AppCompatActivity {
         });
     }
 
-    public void JSONRequest() { // Volley 요청 메서드
+    public void GsonRequest() { // Volley 요청 메서드
         //String url = edt2.getText().toString();
-        String url = "https://www.kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchDailyBoxOfficeList.json?key=키&targetDt=20200302";
+        String url = "https://www.kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchDailyBoxOfficeList.json?key=0850a722a3fec449b4bce97d7bca5433&targetDt=20200302";
 
         // 문자열을 주고 받기 위한 요청 객체
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url, // 웹서버 요청 시 어떤 방식이냐, 어떤 url이냐 구분
@@ -114,6 +125,14 @@ public class WebRequestActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(String response) {
                         volleyPrintln("응답 : " + response);
+
+                        processResponse(response); // Volley에서 요청을 보내서 응답 받은 문자열
+                    }
+
+                    public void processResponse(String response) { // JSON 문자열을 MovieList 객체로 변환함
+                        Gson gson = new Gson();
+                        MovieList movieList = gson.fromJson(response, MovieList.class); // 응답 받은 JSON 문자열을 MovieList 자바 객체로 변환
+                        volleyPrintln("영화 정보의 수 : " + movieList.boxOfficeResult.dailyBoxOfficeList.size());
                     }
                 },
                 new Response.ErrorListener() { // 에러 발생 시 호출
