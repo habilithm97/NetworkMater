@@ -5,17 +5,32 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
 import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.gson.Gson;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class GsonCardView extends AppCompatActivity {
 
-    static RequestQueue requestQueue;
+    private static final String TAG = "GsonCardView";
+
+    static RequestQueue requestQueue; // 요청 큐는 한 번만 만들어 계속 사용할 수 있기 때문에 static 변수로 선언함
+
+    RecyclerViewAdapter adapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,7 +50,7 @@ public class GsonCardView extends AppCompatActivity {
         }
 
         RecyclerView recyclerView = findViewById(R.id.recyclerView);
-        RecyclerViewAdapter adapter = new RecyclerViewAdapter();
+        adapter = new RecyclerViewAdapter();
         recyclerView.setAdapter(adapter);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
@@ -43,6 +58,50 @@ public class GsonCardView extends AppCompatActivity {
     }
 
     public void GsonRequest() {
-        String url = "";
+        String url = "https://www.kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchDailyBoxOfficeList.json?key=0850a722a3fec449b4bce97d7bca5433&targetDt=20200302";
+
+        StringRequest request = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                println("응답 : " + response);
+
+                processResponse(response); // 응답을 받았을 때 호출됨
+            }
+        }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        println("에러 : " + error.getMessage());
+                    }
+                }
+        ) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                return params;
+            }
+        };
+
+        request.setShouldCache(false); // 이전 응답 결과를 사용하지 않겠다면 캐시를 사용하지 않도록 false
+        requestQueue.add(request);
+        println("요청 전송. ");
+    }
+
+    public void println(String data) {
+        Log.d(TAG, data);
+    }
+
+    public void processResponse(String response) {
+        Gson gson = new Gson();
+        MovieList movieList = gson.fromJson(response, MovieList.class); // 응답 받은 JSON 문자열을 MovieList 객체로 변환함
+
+        println("영화 정보 수 : " + movieList.boxOfficeResult.dailyBoxOfficeList.size());
+
+        for(int i = 0; i < movieList.boxOfficeResult.dailyBoxOfficeList.size(); i++) {
+            Movie movie = movieList.boxOfficeResult.dailyBoxOfficeList.get(i);
+
+            adapter.addItem(movie);
+        }
+
+        adapter.notifyDataSetChanged();
     }
 }

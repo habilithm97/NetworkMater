@@ -11,21 +11,21 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
 // 리사이클러뷰는 선택 위젯이므로 어댑터가 데이터 관리와 뷰 객체 관리를 담당함
-public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHoleder> {
+public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
 
     ArrayList<Movie> items = new ArrayList<Movie>();
 
     @NonNull
     @Override
-    public ViewHoleder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(viewGroup.getContext());
         View itemView = inflater.inflate(R.layout.movie_item, viewGroup, false);
 
-        return new ViewHoleder(itemView);
+        return new ViewHolder(itemView);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHoleder viewholder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder viewholder, int position) {
         Movie item = items.get(position);
         viewholder.setItem(item);
     }
@@ -47,11 +47,11 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         return items.get(position);
     }
 
-    static class ViewHoleder extends RecyclerView.ViewHolder {
+    static class ViewHolder extends RecyclerView.ViewHolder {
 
         TextView tv, tv2;
 
-        public ViewHoleder(@NonNull View itemView) {
+        public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
             tv = itemView.findViewById(R.id.tv);
