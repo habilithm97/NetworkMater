@@ -117,7 +117,7 @@ public class WebRequestActivity extends AppCompatActivity {
 
     public void GsonRequest() { // Volley 요청 메서드
         //String url = edt2.getText().toString();
-        String url = "https://www.kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchDailyBoxOfficeList.json?key=0850a722a3fec449b4bce97d7bca5433&targetDt=20200302";
+        String url = "https://www.kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchDailyBoxOfficeList.json?key=키&targetDt=20200302";
 
         // 문자열을 주고 받기 위한 요청 객체
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url, // 웹서버 요청 시 어떤 방식이냐, 어떤 url이냐 구분

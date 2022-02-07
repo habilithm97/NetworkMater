@@ -58,7 +58,7 @@ public class GsonCardView extends AppCompatActivity {
     }
 
     public void GsonRequest() {
-        String url = "https://www.kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchDailyBoxOfficeList.json?key=0850a722a3fec449b4bce97d7bca5433&targetDt=20200302";
+        String url = "https://www.kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchDailyBoxOfficeList.json?key=키&targetDt=20200302";
 
         StringRequest request = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
