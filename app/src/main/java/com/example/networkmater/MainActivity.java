@@ -23,7 +23,12 @@ import java.net.Socket;
 *소켓 : 소켓 통신에서는 클라이언트와 서버 사이의 연결이 지속되고 실시간으로 서로 데이터를 주고 받음
  -> 소켓 연결 등을 시도하거나 응답을 받아서 처리할 때 스레드를 사용해야됨
 
-*자바에서 HTTP 클라이언트를 만드는 가장 간단한 방법은 URL 객체 생성 후 이 객체의 openConnection()을 호출하여 HttpURLConnection 객체를 만드는 것임임 */
+*자바에서 HTTP 클라이언트를 만드는 가장 간단한 방법은 URL 객체 생성 후 이 객체의 openConnection()을 호출하여 HttpURLConnection 객체를 만드는 것임
+
+*직렬화(Serialize) : 자바 시스템 내부에서 사용되는 Object 또는 Data를 외부의 자바 시스템에서도 사용할 수 있도록 byte 형태로 변환하는 기술
+ -JVM의 메모리에 상주되어 있는 객체 데이터를 바이트 형태로 변환하는 기술, 직렬화된 바이트 형태의 데이터를 객체로 변환해서 JVM으로 상주시키는 형태
+ -직렬화를 통해 프로그램이 실행되는 동안 생성된 객체를 스트림을 이용해서 지속적으로 보관하거나 전송할 수 있음
+*/
 
 public class MainActivity extends AppCompatActivity {
 
@@ -46,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
         EditText edt = (EditText) findViewById(R.id.edt);
         tv = (TextView) findViewById(R.id.tv);
         tv2 = (TextView) findViewById(R.id.tv2);
@@ -82,7 +88,6 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-
     public void sendData(String data) { // 클라이언트 기능 소켓
         try {
             int portNum = 5001; // 포트 번호
@@ -90,14 +95,16 @@ public class MainActivity extends AppCompatActivity {
             printClientLog("소켓으로 서버 접속 완료. ");
 
             // 소켓 객체로 데이터 전송하기
-            // ObjectOutputStream과 ObjectInputStream은 실제 앱에서는 자바가 아닌 다른 언어로 만들어진 서버와 통신할 경우가 있기 때문에 잘 사용하지않음
+            // ObjectOutputStream/ObjectInputStream은 실제 앱에서는 자바가 아닌 다른 언어로 만들어진 서버와 통신할 경우가 있기 때문에 잘 사용하지 않음
             ObjectOutputStream outputStream = new ObjectOutputStream(socket.getOutputStream()); // 보내기 위한 통로 생성
-            outputStream.writeObject(data);
-            outputStream.flush();
+            outputStream.writeObject(data); // 객체를 직렬화함
+            outputStream.flush(); // writeObject()하면 버퍼에 남아 있을 수 있기 때문에 flush()
             printClientLog("데이터 전송 완료. ");
 
+
+
             ObjectInputStream inputStream = new ObjectInputStream(socket.getInputStream());
-            printClientLog("서버로부터 받아옴 : " + inputStream.readObject());
+            printClientLog("서버로부터 받아옴 : " + inputStream.readObject()); // 서버에서 보낸 객체 읽기
             socket.close();
 
         } catch (Exception e) {

@@ -60,6 +60,7 @@ public class GsonCardView extends AppCompatActivity {
     public void GsonRequest() {
         String url = "https://www.kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchDailyBoxOfficeList.json?key=키&targetDt=20200302";
 
+        // URL에서 문자열 응답을 요청함
         StringRequest request = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -74,6 +75,8 @@ public class GsonCardView extends AppCompatActivity {
                     }
                 }
         ) {
+            // 서버에 전송할 데이터를 Map 객체에 담아 반환하게 되면
+            // 이 메서드에서 반환한 Map 객체의 데이터를 웹의 질의 문자열 형식으로 만들어 요청 큐에서 서버 요청 시 서버에 전송됨
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<String, String>();
@@ -101,7 +104,6 @@ public class GsonCardView extends AppCompatActivity {
 
             adapter.addItem(movie);
         }
-
         adapter.notifyDataSetChanged();
     }
 }
