@@ -11,9 +11,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.NetworkMater">
-        <activity android:name=".GsonCardView"></activity>
+        <activity android:name=".MainActivity"></activity>
         <activity android:name=".WebRequestActivity" />
-        <activity android:name=".MainActivity">
+        <activity android:name=".GsonCardView">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

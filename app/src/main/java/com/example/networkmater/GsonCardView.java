@@ -36,15 +36,6 @@ public class GsonCardView extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gson_card_view);
 
-        EditText edt = (EditText)findViewById(R.id.edt);
-        Button btn = (Button)findViewById(R.id.btn);
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                GsonRequest();
-            }
-        });
-
         if (requestQueue == null) {
             requestQueue = Volley.newRequestQueue(getApplicationContext());
         }
@@ -55,10 +46,12 @@ public class GsonCardView extends AppCompatActivity {
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
+
+        GsonRequest();
     }
 
     public void GsonRequest() {
-        String url = "https://www.kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchDailyBoxOfficeList.json?key=키&targetDt=20200302";
+        String url = "https://www.kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchDailyBoxOfficeList.json?key=0850a722a3fec449b4bce97d7bca5433&targetDt=20200302";
 
         // URL에서 문자열 응답을 요청함
         StringRequest request = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
@@ -100,8 +93,8 @@ public class GsonCardView extends AppCompatActivity {
         println("영화 정보 수 : " + movieList.boxOfficeResult.dailyBoxOfficeList.size());
 
         for(int i = 0; i < movieList.boxOfficeResult.dailyBoxOfficeList.size(); i++) {
+            // 영화 목록 객체에서 데이터를 가져와 그 수 만큼 어댑터로 표시함
             Movie movie = movieList.boxOfficeResult.dailyBoxOfficeList.get(i);
-
             adapter.addItem(movie);
         }
         adapter.notifyDataSetChanged();
